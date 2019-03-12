@@ -12,3 +12,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: stats, Matrix
 RoxygenNote: 6.1.1.9000
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

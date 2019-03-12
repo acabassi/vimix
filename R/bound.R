@@ -1,76 +1,77 @@
+#' Compute logB function
+#' @param W KxK matrix
+#' @param nu Vector of length K
+logB <- function(W, nu){
+    D <- NCOL(W)
+    return(-0.5*nu*log(det(W)) - (0.5*nu*D*log(2) + 0.25*D*(D - 1) * log(pi) +
+                                      sum(lgamma(0.5 * (nu + 1 - 1:NCOL(W)))) ))  #log of B.79
+}
 
 #' Lower bound for multivariate Gaussian
 #' @param X NxD matrix data
 #' @param model Model parameters
 #' @param prior Model parameters
-#' @param indep Independent covariates (boolean)
 #' @return Value of lower bound
 #' @export
-boundGauss = function(X, model, prior, indep){
+boundGauss = function(X, model, prior){
 
     alpha0 = prior$alpha
     beta0 = prior$beta
     v0 = prior$v
-    logW0 = prior$logW
     m0 = prior$m
-    M0 = prior$M
+    W0 = prior$W
+    W0inv = prior$Winv
 
     alpha = model$alpha
     beta = model$beta
     v = model$v
-    logW = model$logW
-    Resp = model$Resp
     m = model$m
-    M = model$M
+    W = model$W
+    S = model$S
+    xbar = model$xbar
+    Resp = model$Resp
+    logResp = model$logResp
+
+    cat('S[,1,1]', S[,1,1], '\n')
 
     N = dim(X)[1]
     D = dim(X)[2]
     K = dim(Resp)[2]
 
-    Epz = 0
+    Nk = colSums(Resp)
 
-    Resp[which(Resp<.Machine$double.xmin)] = .Machine$double.xmin # TO DO controllare che questo non alteri i risultati
-    Eqz = sum(Resp*log(Resp)) # (10.75) univariate
+    logpi = digamma(alpha) - digamma(sum(alpha))
+    Epz = sum(Resp%*%logpi)
+    # Resp[which(Resp<.Machine$double.xmin)] = .Machine$double.xmin # TO DO controllare che questo non alteri i risultati
+    Eqz = sum(Resp*logResp) # (10.75) univariate
 
     logCalpha0 = lgamma(K*alpha0)-K*lgamma(alpha0)
-    Eppi = logCalpha0 # (10.73)
+    Eppi = logCalpha0 + sum((alpha0-1)*logpi)# (10.73)
+
     logCalpha = lgamma(sum(alpha))-sum(lgamma(alpha))
-    Eqpi = logCalpha # (10.76)
+    Eqpi = logCalpha + sum((alpha-1)*logpi)# (10.76)
 
-    if(indep){
+    EpX = EpMuLambda = EpMuLambda2 = EqMuLambda <- 0
+    log_Lambda <- rep(0,K)
 
-        Epmu = 0.5*D*K*log(beta0/(2*pi)) - 0.5*sum(beta0/beta) - 0.5*beta0*sum((m-m0)*v/M)# (10.74) 1/2
-        Eqmu = 0.5*D*sum(log(beta/(2*pi))) - 0.5*D*K # (10.77) 1/2
-        # I have simplified the + 0.5*sum(digamma(v)) + sum(log(1/(0.5*M)))
+    for(k in 1:K){
+        log_Lambda[k] <- sum(digamma((v[k] + 1 - 1:D)/2)) + D*log(2) + log(det(W[,,k]))
+        EpX <- EpX + Nk[k] * (log_Lambda[k] - D/beta[k] - v[k] * matrix.trace(S[,,k] %*% W[,,k]) - v[k]*t(xbar[,k] - m[,k]) %*% W[,,k] %*% (xbar[,k] - m[,k]) - D*log(2*pi) )
 
-        vk_wkd = 0; for(k in 1:K) vk_wkd = vk_wkd + sum(v[k]/M[,k])
-        EpLambda = (0.5*v0 - 1)*sum(digamma(v)) + sum(log(1/(0.5*M))) -0.5*sum(M0*vk_wkd) # (10.74) 2/2
+        # (10.74)
+        EpMuLambda <- EpMuLambda + D*log(beta0/(2*pi)) + log_Lambda[k] -
+                        (D*beta0)/beta[k] - beta0*v[k]*t(m[,k] - m0) %*% W[,,k] %*% (m[,k] - m0)
+        EpMuLambda2 <- EpMuLambda2 + v[k] * matrix.trace(W0inv %*% W[,,k])
 
-        EqLambda = 0; for(k in 1:K) EqLambda = EqLambda + sum((0.5*v[k]-1)*sum(digamma(v[k]) + log(1/(2*M[,k])))) -0.5*v[k]# (10.77) 2/2
-        # I have simplified the -log(gamma(v0/2))*K*D + 0.5*v0*log(0.5*M0)
-
-        EpX = 0 # (10.71)
-        for(n in 1:N){
-            for(k in 1:K){
-                for(d in 1:D){
-                    EpX = EpX + Resp[n,k]*sum(digamma(v[k]) + log(1/(2*M[,k])) - 1/beta[k] - (v[k]*(X[n,d]-m[d,k])^2)/M[d,k] - log(2*pi))
-                }
-            }
-        }
-        EpX = 0.5*EpX
-    }else{
-        Epmu = 0.5*D*K*log(beta0) # (10.74) 1/2
-        Eqmu = 0.5*D*sum(log(beta)) # (10.77) 1/2
-
-        logB0 = -0.5*v0*(logW0+D*log(2)); for(d in 1:D) logB0 = logB0 - lgamma(0.5*(v0+1-d))
-        EpLambda = K*logB0 # (10.74) 2/2
-        logB =  -0.5*v*(logW+D*log(2)); for(k in 1:K) for(d in 1:D) logB[k] = logB[k] - lgamma(0.5*(v[k]+1-d))
-        EqLambda = sum(logB) # (10.77) 2/2
-
-        EpX = -0.5*D*N*log(2*pi) # (10.71)
+        # (10.77)
+        EqMuLambda <- EqMuLambda + 0.5*log_Lambda[k] + 0.5*D*log(beta[k]/(2*pi)) - 0.5*D - logB(W[,,k], v[k]) -
+                      0.5*(v[k] - D - 1)*log_Lambda[k] + 0.5*v[k]*D
     }
 
-    L = Epz - Eqz + Eppi - Eqpi + Epmu - Eqmu + EpLambda - EqLambda + EpX
+    EpMuLambda <- 0.5*EpMuLambda + K*logB(W0, v0) + 0.5*(v0 - D - 1)*sum(log_Lambda) - 0.5*EpMuLambda2 # 10.74
+    EpX  <- 0.5 * EpX # (10.71)
+
+    L = Epz - Eqz + Eppi - Eqpi + EpMuLambda - EqMuLambda + EpX
     if(!is.finite(L)) stop("Lower bound is not finite")
     L
 }
@@ -84,7 +85,7 @@ boundGauss = function(X, model, prior, indep){
 #' @return Boolean flag that indicates if algorithm has converged
 #' @export
 check_convergence = function(L, iter, tol, maxiter, verbose){
-    if (abs(L[iter*2+1]-L[iter*2-1]) < tol*abs(L[iter*2+1])){ # stopping criterion
+    if (abs(L[iter]-L[iter-1]) < tol*abs(L[iter])){ # stopping criterion
         if(verbose) message(sprintf("Converged in %d steps.\n", iter))
         conv = TRUE
     }else{

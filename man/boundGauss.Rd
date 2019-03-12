@@ -4,7 +4,7 @@
 \alias{boundGauss}
 \title{Lower bound for multivariate Gaussian}
 \usage{
-boundGauss(X, model, prior, indep)
+boundGauss(X, model, prior)
 }
 \arguments{
 \item{X}{NxD matrix data}
@@ -12,8 +12,6 @@ boundGauss(X, model, prior, indep)
 \item{model}{Model parameters}
 
 \item{prior}{Model parameters}
-
-\item{indep}{Independent covariates (boolean)}
 }
 \value{
 Value of lower bound

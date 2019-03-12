@@ -12,8 +12,8 @@ init(X, K, init = F, verbose = T)
 \item{K}{Number of mixture components}
 
 \item{init}{Initialisation method (optional). If it is a vector, it is interpreted as the vector of initial cluster allocations.
-If it is a string, it is interpreted as the name of the clustering algorithm used for the initialisation (only "kmeans")
-available at the moment).}
+If it is a string, it is interpreted as the name of the clustering algorithm used for the initialisation (only "kmeans" and
+"random") available at the moment).}
 
 \item{verbose}{Boolean flag which, if TRUE, prints the type of initialization}
 }

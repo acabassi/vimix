@@ -4,7 +4,7 @@
 \alias{vimix}
 \title{Variational Bayesian inference for unsupervised clustering}
 \usage{
-vimix(X, K, prior, init = NULL, tol = 1e-19, maxiter = 2000,
+vimix(X, K, prior, init = "kmeans", tol = 1e-19, maxiter = 2000,
   verbose = F)
 }
 \arguments{
@@ -14,9 +14,9 @@ vimix(X, K, prior, init = NULL, tol = 1e-19, maxiter = 2000,
 
 \item{prior}{Prior parameters (optional).}
 
-\item{init}{Initialisation method (optional). If it is a vector, it is interpreted as the vector of initial cluster allocations.
-If it is a string, it is interpreted as the name of the clustering algorithm used for the initialisation (only "kmeans")
-available at the moment).}
+\item{init}{Initialisation method (optional). If it is a vector, it is interpreted as the vector of initial
+cluster allocations. If it is a string, it is interpreted as the name of the clustering algorithm used for
+the initialisation (only "kmeans" and "random") available at the moment).}
 
 \item{tol}{Tolerance on lower bound. Default is 10e-20.}
 
@@ -25,13 +25,24 @@ available at the moment).}
 \item{verbose}{Boolean flag which, if TRUE, prints the iteration numbers. Default is FALSE.}
 }
 \value{
-A list containing L, the lower bound at each step of the algorithm, label, a vector containing the cluster
-labels, model, a list containing the trained model structure, and a vector called n_ comp which, if model selection
-is required, contains the number of mixture components at every step of the VB algorithm.
+A list containing L, the lower bound at each step of the algorithm, label, a vector containing the
+cluster labels, model, a list containing the trained model structure, and a vector called n_ comp which, if
+model selection is required, contains the number of mixture components at every step of the VB algorithm.
 }
 \description{
 Variational Bayesian inference for unsupervised clustering
 }
+\examples{
+## Load a dataset containing 200 2-dimensional data points
+data <- as.matrix(read.csv(system.file("extdata", "example1-data.csv", package = "vimix"),
+row.names = 1))
+
+## Use variational inference for mixture of Gaussians to find clusters
+output <- vimix(data, 2)
+}
 \references{
 Bishop, C.M., 2006. Pattern recognition and machine learning. Springer.
+}
+\author{
+Alessandra Cabassi \email{alessandra.cabassi@mrc-bsu.cam.ac.uk}
 }
