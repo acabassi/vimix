@@ -10,3 +10,5 @@ Description: Set of tools for estimation of the posterior distribution of Bayesi
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports: stats, Matrix
+RoxygenNote: 6.1.1.9000
