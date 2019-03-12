@@ -1,0 +1,12 @@
+Package: vimix
+Title: Variational Inference for MIXture models
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Alessandra",
+           family = "Cabassi",
+           role = c("aut", "cre"),
+           email = "alessandra.cabassi@mrc-bsu.cam.ac.uk")
+Description: Set of tools for estimation of the posterior distribution of Bayesian mixture models using variational inference.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
