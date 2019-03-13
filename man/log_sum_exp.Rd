@@ -6,6 +6,9 @@
 \usage{
 log_sum_exp(x)
 }
+\arguments{
+\item{x}{Vector of values}
+}
 \description{
 Use the log sum exp trick to improve numerical stability
 }

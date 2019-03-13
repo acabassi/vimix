@@ -1,6 +1,6 @@
 Package: vimix
 Title: Variational Inference for MIXture models
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person(given = "Alessandra",
            family = "Cabassi",
@@ -10,9 +10,7 @@ Description: Set of tools for estimation of the posterior distribution of Bayesi
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: stats, Matrix
+Imports: stats, Matrix, matrixcalc
+Suggests: knitr, rmarkdown, ggplot2, broom
 RoxygenNote: 6.1.1.9000
-Suggests: 
-    knitr,
-    rmarkdown
 VignetteBuilder: knitr

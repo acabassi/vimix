@@ -38,48 +38,27 @@ vimix = function(X, K, prior, init = "kmeans", tol = 10e-20,
     }
     L = rep(-Inf,maxiter)
 
-    # Resp = init(X, K, init, verbose)
-
     if(missing(prior)){ # set default prior
             prior = list(alpha = 1/K, beta = 1, m = colMeans(X), v = D+50, W = diag(100,D))
             prior$Winv = solve(prior$W)
     }
 
     # model initialisation
-
     Wreshape = prior$W
     dim(Wreshape) = c(dim(Wreshape),1)
 
     model = list(alpha = rep(prior$alpha,K),
                  beta = rep(prior$beta, K),
-                 m =  t(kmeans(X, K, nstart = 25)$centers),
+                 m =  t(stats::kmeans(X, K, nstart = 25)$centers),
                  v = rep(prior$v, K),
                  W = Wreshape[,,rep(1,K)])
-    # model = maximizeGauss(X, model, prior)
-
-    # cat('model$alpha', model$alpha, '\n')
-    # cat('model$beta', model$beta, '\n')
-    # cat('model$m', model$m, '\n')
-    # cat('model$v', model$v, '\n')
-    # cat('model$W', model$W[,1,1], '\n')
-    # cat('model$Resp[1,', (model$Resp), '\n')
 
     for (iter in 2:maxiter){
         if(verbose) message(sprintf("Iteration number %d. ", iter))
 
         model = expectGauss(X, model) # Expectation step
-        # L[iter*2] = boundGauss(X, model, prior)/N # Lower bound
-
-        # cat('model$Resp', head(model$Resp), '\n')
-
         model = maximizeGauss(X, model, prior) # Maximisation step
         L[iter] = boundGauss(X, model, prior)/N # Lower bound
-
-        # cat('model$alpha', model$alpha, '\n')
-        # cat('model$beta', model$beta, '\n')
-        # cat('model$m', model$m[,1], '\n')
-        # cat('model$v', model$v[1], '\n')
-        # cat('model$M', model$W[,1,1], '\n')
 
         if(check_convergence(L, iter, tol, maxiter, verbose)) break # check for convergence
     }

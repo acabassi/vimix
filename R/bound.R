@@ -32,8 +32,6 @@ boundGauss = function(X, model, prior){
     Resp = model$Resp
     logResp = model$logResp
 
-    cat('S[,1,1]', S[,1,1], '\n')
-
     N = dim(X)[1]
     D = dim(X)[2]
     K = dim(Resp)[2]
@@ -56,12 +54,12 @@ boundGauss = function(X, model, prior){
 
     for(k in 1:K){
         log_Lambda[k] <- sum(digamma((v[k] + 1 - 1:D)/2)) + D*log(2) + log(det(W[,,k]))
-        EpX <- EpX + Nk[k] * (log_Lambda[k] - D/beta[k] - v[k] * matrix.trace(S[,,k] %*% W[,,k]) - v[k]*t(xbar[,k] - m[,k]) %*% W[,,k] %*% (xbar[,k] - m[,k]) - D*log(2*pi) )
+        EpX <- EpX + Nk[k] * (log_Lambda[k] - D/beta[k] - v[k] * matrixcalc::matrix.trace(S[,,k] %*% W[,,k]) - v[k]*t(xbar[,k] - m[,k]) %*% W[,,k] %*% (xbar[,k] - m[,k]) - D*log(2*pi) )
 
         # (10.74)
         EpMuLambda <- EpMuLambda + D*log(beta0/(2*pi)) + log_Lambda[k] -
                         (D*beta0)/beta[k] - beta0*v[k]*t(m[,k] - m0) %*% W[,,k] %*% (m[,k] - m0)
-        EpMuLambda2 <- EpMuLambda2 + v[k] * matrix.trace(W0inv %*% W[,,k])
+        EpMuLambda2 <- EpMuLambda2 + v[k] * matrixcalc::matrix.trace(W0inv %*% W[,,k])
 
         # (10.77)
         EqMuLambda <- EqMuLambda + 0.5*log_Lambda[k] + 0.5*D*log(beta[k]/(2*pi)) - 0.5*D - logB(W[,,k], v[k]) -

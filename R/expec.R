@@ -32,20 +32,11 @@ expectGauss = function(X, model){
 
     }
 
-    cat('dim(logRho)',dim(logRho),'\n')
-    cat('logRho[1,]', logRho[1,], '\n')
-
 
     logSumExpLogRho = apply(logRho, 1, log_sum_exp)
 
-    cat('length(logSumExpLogRho)', length(logSumExpLogRho), '\n')
-    cat('logSumExpLogRho[1]',logSumExpLogRho[1],'\n')
-    cat('logRho[1,]-logSumExpLogRho[1]', logRho[1,]-logSumExpLogRho[1], '\n')
-
     logResp =  sweep(logRho, MARGIN = 1, STATS = logSumExpLogRho, FUN = "-")# 10.49
     Resp = apply(logResp, 2, exp)
-
-    cat('Resp[1,]', Resp[1,], '\n')
 
     model$logResp = logResp
     model$Resp = Resp
@@ -53,6 +44,7 @@ expectGauss = function(X, model){
 }
 
 #' Use the log sum exp trick to improve numerical stability
+#' @param x Vector of values
 log_sum_exp <- function(x) {
     # Computes log(sum(exp(x))
     offset <- max(x)

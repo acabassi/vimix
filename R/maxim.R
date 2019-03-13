@@ -38,11 +38,6 @@ maximizeGauss = function(X, model, prior){
         W[,,k] = solve(W[,,k])
     }
 
-    cat('xbar[,1]', xbar[,1], '\n')
-    cat('S[,,1]', S[,,1], '\n')
-    cat('m[,1]', m[,1], '\n')
-    cat('W[,,k]', W[,,1], '\n')
-
     model$alpha = alpha
     model$m = m
     model$W = W
