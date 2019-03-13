@@ -30,3 +30,4 @@ rsconnect/
 
 # Vignette cache
 vignettes/vimix_cache/*
+vignettes/univariate-mixtures_cache/*
