@@ -2,7 +2,7 @@
 % Please edit documentation in R/vimix.R
 \name{vimix_multiGauss}
 \alias{vimix_multiGauss}
-\title{Variational Bayesian inference for unsupervised clustering}
+\title{Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians}
 \usage{
 vimix_multiGauss(X, K, prior, init = "kmeans", tol = 1e-19,
   maxiter = 2000, verbose = F)
@@ -26,11 +26,10 @@ the initialisation (only "kmeans" and "random") available at the moment).}
 }
 \value{
 A list containing L, the lower bound at each step of the algorithm, label, a vector containing the
-cluster labels, model, a list containing the trained model structure, and a vector called n_ comp which, if
-model selection is required, contains the number of mixture components at every step of the VB algorithm.
+cluster labels, model, a list containing the trained model structure.
 }
 \description{
-Variational Bayesian inference for unsupervised clustering
+Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians
 }
 \examples{
 ## Load a dataset containing 200 2-dimensional data points

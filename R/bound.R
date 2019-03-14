@@ -64,3 +64,12 @@ boundGauss = function(X, model, prior){
     if(!is.finite(L)) stop("Lower bound is not finite")
     L
 }
+
+#' Compute logB function
+#' @param W KxK matrix
+#' @param nu Vector of length K
+logB <- function(W, nu){
+    D <- NCOL(W)
+    return(-0.5*nu*log(det(W)) - (0.5*nu*D*log(2) + 0.25*D*(D - 1) * log(pi) +
+                                      sum(lgamma(0.5 * (nu + 1 - 1:NCOL(W)))) ))  #log of B.79
+}

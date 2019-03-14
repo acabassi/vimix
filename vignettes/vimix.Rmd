@@ -1,5 +1,5 @@
 ---
-title: "Introduction to vimix"
+title: "1. Introduction to vimix"
 author: "Alessandra Cabassi"
 date: "`r Sys.Date()`"
 output: 
@@ -8,7 +8,7 @@ output:
       theme: united
       toc: yes
 vignette: >
-  %\VignetteIndexEntry{Introduction to vimix}
+  %\VignetteIndexEntry{1. Introduction to vimix}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -28,23 +28,23 @@ library(vimix)
 data <- rbind(rmvnorm(100,c(-3,0)), rmvnorm(100,c(3,0)))
 
 ## Use variational inference for mixture of Gaussians to find clusters
-output <- vimix(data, 3)
-
+output <- vimix(data, K = 7, verbose = T)
 ```
 
 ```{r example1-plot, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Plot cluster labels
 library(ggplot2)
 library(broom)
+library(gridExtra)
 
 ## Convert data matrix and cluster labels to data.frame
-data <- tidy(data)
-data$label <- as.factor(output$label)
-head(data)
+df <- tidy(data)
+df$label <- as.factor(output$label)
 
 ## Plot clusters
-ggplot(data, aes(X1, X2, col = label)) + geom_point()
+ggplot(df, aes(X1, X2, col = label)) + geom_point()
 ```
+
 ```{r example1-lb, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Check that the lower bound is monotonically increasing
 
@@ -52,7 +52,45 @@ lb <- tidy(output$L[-1])
 lb$lower_bound <- lb$x
 lb$x <- NULL
 lb$iter <- c(1:length(output$L[-1]))
+lb$number_clusters <- output$Cl[-1]
+
+## Plot lower bound
+plot_lb <- ggplot(lb, aes(x=iter,y=lower_bound)) + geom_line(linetype = "dashed") + geom_point()
+
+## Plot number of non-empty clusters
+plot_nc <- ggplot(lb, aes(x=iter,y=number_clusters)) + geom_line(linetype = "dashed") + geom_point()
+
+grid.arrange(plot_lb, plot_nc, ncol = 2)
+```
+```{r example1-ind, message=FALSE, warning=FALSE, cache=TRUE}
+
+## Use variational inference for mixture of Gaussians to find clusters
+output <- vimix(data, K = 7, indep = T, verbose = T)
+```
+
+```{r example1-ind-plot, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
+## Convert data matrix and cluster labels to data.frame
+df <- tidy(data)
+df$label <- as.factor(output$label)
 
 ## Plot clusters
-ggplot(lb, aes(x=iter,y=lower_bound)) + geom_line(linetype = "dashed") + geom_point()
+ggplot(df, aes(X1, X2, col = label)) + geom_point()
+```
+
+```{r example1-ind-lb, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
+## Check that the lower bound is monotonically increasing
+
+lb <- tidy(output$L[-1])
+lb$lower_bound <- lb$x
+lb$x <- NULL
+lb$iter <- c(1:length(output$L[-1]))
+lb$number_clusters <- output$Cl[-1]
+
+## Plot clusters
+plot_lc <- ggplot(lb, aes(x=iter,y=lower_bound)) + geom_line(linetype = "dashed") + geom_point()
+
+## Plot number of non-empty clusters
+plot_nc <- ggplot(lb, aes(x=iter,y=number_clusters)) + geom_line(linetype = "dashed") + geom_point()
+
+grid.arrange(plot_lb, plot_nc, ncol = 2)
 ```

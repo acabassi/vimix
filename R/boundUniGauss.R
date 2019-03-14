@@ -21,7 +21,7 @@ boundUniGauss = function(X, model, prior){
     Resp = model$Resp
     logResp = model$logResp
 
-    N = dim(X)[1]
+    N = length(X)
     D = 1
     K = dim(Resp)[2]
 
@@ -42,7 +42,7 @@ boundUniGauss = function(X, model, prior){
     log_Lambda <- rep(0,K)
 
     for(k in 1:K){
-        log_Lambda[k] <- digamma(v[k]/2) + log(0.5*W[k])
+        log_Lambda[k] <- digamma(v[k]/2) + log(0.5/W[k])
         EpX <- EpX + Nk[k] * (log_Lambda[k] - D/beta[k] -
                                   v[k]*W[k]*sum((X - m[k])^2) - D*log(2*pi))
 
@@ -71,13 +71,4 @@ logUniB <- function(W, nu){
     Winv <- 1/W
     if(is.na(lgamma(0.5 * nu))) stop()
     return(lgamma(0.5 * nu) + 0.5 * nu * log(0.5*Winv))
-}
-
-#' Compute logB function
-#' @param W KxK matrix
-#' @param nu Vector of length K
-logB <- function(W, nu){
-    D <- NCOL(W)
-    return(-0.5*nu*log(det(W)) - (0.5*nu*D*log(2) + 0.25*D*(D - 1) * log(pi) +
-                                      sum(lgamma(0.5 * (nu + 1 - 1:NCOL(W)))) ))  #log of B.79
 }

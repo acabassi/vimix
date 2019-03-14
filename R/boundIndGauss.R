@@ -4,7 +4,7 @@
 #' @param prior Model parameters
 #' @return Value of lower bound
 #' @export
-boundIndGauss = function(X, model, prior){
+boundIndGauss = function(X, model, prior, verbose){
 
     alpha0 = prior$alpha
     beta0 = prior$beta
@@ -44,7 +44,7 @@ boundIndGauss = function(X, model, prior){
     log_Lambda <- rep(0,K)
 
     for(k in 1:K){
-        log_Lambda[k] <- D*digamma(v[k]/2) + sum(log(0.5 * (1/W[,k])))
+        log_Lambda[k] <- D*digamma(v[k]/2) + sum(log(0.5 /W[,k]))
         pollo <- sweep(X, 2, m[,k], FUN = "-")
         EpX <- EpX + Nk[k] * (log_Lambda[k] - D/beta[k] -
                                   v[k]*sum((pollo)^2%*%W[,k]) - D*log(2*pi))
@@ -70,5 +70,6 @@ boundIndGauss = function(X, model, prior){
     L = Epz - Eqz + Eppi - Eqpi + EpMuLambda - EqMuLambda + EpX
 
     if(!is.finite(L)) stop("Lower bound is not finite")
+
     L
 }

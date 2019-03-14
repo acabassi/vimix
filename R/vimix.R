@@ -30,7 +30,7 @@ vimix_indepGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     N = dim(X)[1]
     D = dim(X)[2]
 
-    L = rep(-Inf,maxiter)
+    L = Cl = rep(-Inf,maxiter)
 
     if(missing(prior)){ # set default prior
         prior = list(alpha = 1/K, beta = 1, m = mean(X), v = 50 + D, W = rep(100,D))
@@ -50,12 +50,14 @@ vimix_indepGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
 
         model = expectIndGauss(X, model) # Expectation step
         model = maximizeIndGauss(X, model, prior) # Maximisation step
-        L[iter] = boundIndGauss(X, model, prior)/N # Lower bound
+        L[iter] = boundIndGauss(X, model, prior, verbose)/N # Lower bound
+        Cl[iter] = sum(colSums(model$Resp) > 10e-10*N) # Non-empty clusters
 
         if(check_convergence(L, iter, tol, maxiter, verbose)) break # check for convergence
     }
 
-    output = list(L = L[1:iter], label = apply(model$R, 1, which.max), model=model)
+    output = list(L = L[1:iter], Cl = Cl[1:iter],
+                  label = apply(model$R, 1, which.max), model=model)
 }
 
 
@@ -90,10 +92,10 @@ vimix_univaGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     N = length(X)
     D = 1
 
-    L = rep(-Inf,maxiter)
+    L = Cl = rep(-Inf,maxiter)
 
     if(missing(prior)){ # set default prior
-        prior = list(alpha = 1/K, beta = 1, m = mean(X), v = 5 + D, W = 100)
+        prior = list(alpha = 1/K, beta = 1, m = mean(X), v = D + 50, W = 100)
     }
 
     # model initialisation
@@ -109,11 +111,13 @@ vimix_univaGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
         model = expectUniGauss(X, model) # Expectation step
         model = maximizeUniGauss(X, model, prior) # Maximisation step
         L[iter] = boundUniGauss(X, model, prior)/N # Lower bound
+        Cl[iter] = sum(colSums(model$Resp) > 10e-10*N)
 
         if(check_convergence(L, iter, tol, maxiter, verbose)) break # check for convergence
     }
 
-    output = list(L = L[1:iter], label = apply(model$R, 1, which.max), model=model)
+    output = list(L = L[1:iter], Cl = Cl[1:iter],
+                  label = apply(model$R, 1, which.max), model=model)
 }
 
 #' Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians
@@ -148,7 +152,7 @@ vimix_multiGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     N = dim(X)[1]
     D = dim(X)[2]
 
-    L = rep(-Inf,maxiter)
+    L = Cl = rep(-Inf,maxiter)
 
     if(missing(prior)){ # set default prior
         prior = list(alpha = 1/K, beta = 1, m = colMeans(X), v = D+50, W = diag(100,D))
@@ -171,11 +175,13 @@ vimix_multiGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
         model = expectGauss(X, model) # Expectation step
         model = maximizeGauss(X, model, prior) # Maximisation step
         L[iter] = boundGauss(X, model, prior)/N # Lower bound
+        Cl[iter] = sum(colSums(model$Resp) > 10e-10*N) # Number of non-empty clusters
 
         if(check_convergence(L, iter, tol, maxiter, verbose)) break # check for convergence
     }
 
-    output = list(L = L[1:iter], label = apply(model$R, 1, which.max), model=model)
+    output = list(L = L[1:iter], Cl = Cl[1:iter],
+                  label = apply(model$R, 1, which.max), model=model)
 }
 
 #' Variational Bayesian inference for unsupervised clustering
@@ -203,7 +209,7 @@ vimix_multiGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
 #' output <- vimix(data, 2)
 #' @export
 #'
-vimix = function(X, K, prior, indep = F, init = "kmeans", tol = 10e-20,
+vimix = function(X, K, prior, indep = F, init = "kmeans", tol = 10e-5,
                  maxiter = 2000, verbose = F){
 
     if(is.vector(X)){
