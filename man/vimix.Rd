@@ -4,8 +4,8 @@
 \alias{vimix}
 \title{Variational Bayesian inference for unsupervised clustering}
 \usage{
-vimix(X, K, prior, init = "kmeans", tol = 1e-19, maxiter = 2000,
-  verbose = F)
+vimix(X, K, prior, indep = F, init = "kmeans", tol = 1e-04,
+  maxiter = 2000, verbose = F)
 }
 \arguments{
 \item{X}{NxD data matrix.}
@@ -13,6 +13,8 @@ vimix(X, K, prior, init = "kmeans", tol = 1e-19, maxiter = 2000,
 \item{K}{(Maximum) number of clusters.}
 
 \item{prior}{Prior parameters (optional).}
+
+\item{indep}{Booleand indicator. If TRUE, the features are considered to be independent. Default is FALSE.}
 
 \item{init}{Initialisation method (optional). If it is a vector, it is interpreted as the vector of initial
 cluster allocations. If it is a string, it is interpreted as the name of the clustering algorithm used for
@@ -26,8 +28,7 @@ the initialisation (only "kmeans" and "random") available at the moment).}
 }
 \value{
 A list containing L, the lower bound at each step of the algorithm, label, a vector containing the
-cluster labels, model, a list containing the trained model structure, and a vector called n_ comp which, if
-model selection is required, contains the number of mixture components at every step of the VB algorithm.
+cluster labels, model, a list containing the trained model structure.
 }
 \description{
 Variational Bayesian inference for unsupervised clustering

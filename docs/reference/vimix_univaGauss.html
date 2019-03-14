@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Variational Bayesian inference for unsupervised clustering — vimix_univaGauss • vimix</title>
+<title>Variational Bayesian inference for unsupervised clustering, mixture of univariate Gaussians — vimix_univaGauss • vimix</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Variational Bayesian inference for unsupervised clustering — vimix_univaGauss" />
+<meta property="og:title" content="Variational Bayesian inference for unsupervised clustering, mixture of univariate Gaussians — vimix_univaGauss" />
 
-<meta property="og:description" content="Variational Bayesian inference for unsupervised clustering" />
+<meta property="og:description" content="Variational Bayesian inference for unsupervised clustering, mixture of univariate Gaussians" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,14 +116,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Variational Bayesian inference for unsupervised clustering</h1>
+    <h1>Variational Bayesian inference for unsupervised clustering, mixture of univariate Gaussians</h1>
     
     <div class="hidden name"><code>vimix_univaGauss.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Variational Bayesian inference for unsupervised clustering</p>
+    <p>Variational Bayesian inference for unsupervised clustering, mixture of univariate Gaussians</p>
     
     </div>
 
@@ -168,8 +168,7 @@ the initialisation (only "kmeans" and "random") available at the moment).</p></t
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list containing L, the lower bound at each step of the algorithm, label, a vector containing the
-cluster labels, model, a list containing the trained model structure, and a vector called n_ comp which, if
-model selection is required, contains the number of mixture components at every step of the VB algorithm.</p>
+cluster labels, model, a list containing the trained model structure.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -178,11 +177,10 @@ model selection is required, contains the number of mixture components at every 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Load a dataset containing 200 2-dimensional data points</span>
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>as.matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/read.table'>read.csv</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"example1-data.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"vimix"</span>),
-<span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>1</span>))
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>100</span>, -<span class='fl'>4</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>100</span>, <span class='fl'>4</span>))
 
 <span class='co'>## Use variational inference for mixture of Gaussians to find clusters</span>
-<span class='no'>output</span> <span class='kw'>&lt;-</span> <span class='fu'>vimix_univaGauss</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/vector'>as.vector</a></span>(<span class='no'>data</span>[,<span class='fl'>1</span>]), <span class='fl'>2</span>)</div></pre>
+<span class='no'>output</span> <span class='kw'>&lt;-</span> <span class='fu'>vimix_univaGauss</span>(<span class='no'>data</span>, <span class='fl'>3</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

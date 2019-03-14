@@ -127,8 +127,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>vimix</span>(<span class='no'>X</span>, <span class='no'>K</span>, <span class='no'>prior</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-19</span>, <span class='kw'>maxiter</span> <span class='kw'>=</span> <span class='fl'>2000</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+    <pre class="usage"><span class='fu'>vimix</span>(<span class='no'>X</span>, <span class='no'>K</span>, <span class='no'>prior</span>, <span class='kw'>indep</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-04</span>,
+  <span class='kw'>maxiter</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,6 +144,10 @@
     <tr>
       <th>prior</th>
       <td><p>Prior parameters (optional).</p></td>
+    </tr>
+    <tr>
+      <th>indep</th>
+      <td><p>Booleand indicator. If TRUE, the features are considered to be independent. Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>init</th>
@@ -168,8 +172,7 @@ the initialisation (only "kmeans" and "random") available at the moment).</p></t
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list containing L, the lower bound at each step of the algorithm, label, a vector containing the
-cluster labels, model, a list containing the trained model structure, and a vector called n_ comp which, if
-model selection is required, contains the number of mixture components at every step of the VB algorithm.</p>
+cluster labels, model, a list containing the trained model structure.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 

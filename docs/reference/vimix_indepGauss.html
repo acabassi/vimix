@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians — vimix_multiGauss • vimix</title>
+<title>Variational Bayesian inference for unsupervised clustering, mixture of independent Gaussians — vimix_indepGauss • vimix</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians — vimix_multiGauss" />
+<meta property="og:title" content="Variational Bayesian inference for unsupervised clustering, mixture of independent Gaussians — vimix_indepGauss" />
 
-<meta property="og:description" content="Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians" />
+<meta property="og:description" content="Variational Bayesian inference for unsupervised clustering, mixture of independent Gaussians" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,18 +116,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians</h1>
+    <h1>Variational Bayesian inference for unsupervised clustering, mixture of independent Gaussians</h1>
     
-    <div class="hidden name"><code>vimix_multiGauss.Rd</code></div>
+    <div class="hidden name"><code>vimix_indepGauss.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Variational Bayesian inference for unsupervised clustering, mixture of multivariate Gaussians</p>
+    <p>Variational Bayesian inference for unsupervised clustering, mixture of independent Gaussians</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>vimix_multiGauss</span>(<span class='no'>X</span>, <span class='no'>K</span>, <span class='no'>prior</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-19</span>,
+    <pre class="usage"><span class='fu'>vimix_indepGauss</span>(<span class='no'>X</span>, <span class='no'>K</span>, <span class='no'>prior</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-19</span>,
   <span class='kw'>maxiter</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -181,7 +181,7 @@ cluster labels, model, a list containing the trained model structure.</p>
 <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>1</span>))
 
 <span class='co'>## Use variational inference for mixture of Gaussians to find clusters</span>
-<span class='no'>output</span> <span class='kw'>&lt;-</span> <span class='fu'>vimix_multiGauss</span>(<span class='no'>data</span>, <span class='fl'>2</span>)</div></pre>
+<span class='no'>output</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='vimix_univaGauss.html'>vimix_univaGauss</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/vector'>as.vector</a></span>(<span class='no'>data</span>[,<span class='fl'>1</span>]), <span class='fl'>2</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
