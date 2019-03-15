@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">vimix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <h1>1. Introduction to vimix</h1>
                         <h4 class="author">Alessandra Cabassi</h4>
             
-            <h4 class="date">2019-03-14</h4>
+            <h4 class="date">2019-03-15</h4>
       
       
       <div class="hidden name"><code>vimix.Rmd</code></div>
@@ -111,45 +111,79 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">## Check that the lower bound is monotonically increasing</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">lb &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/broom/topics/tidy">tidy</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">lb<span class="op">$</span>lower_bound &lt;-<span class="st"> </span>lb<span class="op">$</span>x</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">lb<span class="op">$</span>ELBO &lt;-<span class="st"> </span>lb<span class="op">$</span>x</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">lb<span class="op">$</span>x &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6">lb<span class="op">$</span>iter &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>]))</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7">lb<span class="op">$</span>number_clusters &lt;-<span class="st"> </span>output<span class="op">$</span>Cl[<span class="op">-</span><span class="dv">1</span>]</a>
 <a class="sourceLine" id="cb3-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">## Plot lower bound</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">plot_lb &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(lb, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>iter,<span class="dt">y=</span>lower_bound)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">plot_lb &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(lb, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>iter,<span class="dt">y=</span>ELBO)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">## Plot number of non-empty clusters</span></a>
 <a class="sourceLine" id="cb3-13" data-line-number="13">plot_nc &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(lb, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>iter,<span class="dt">y=</span>number_clusters)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a>
 <a class="sourceLine" id="cb3-14" data-line-number="14"></a>
 <a class="sourceLine" id="cb3-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(plot_lb, plot_nc, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="vimix_files/figure-html/example1-lb-1.png" width="700"></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">## Use variational inference for mixture of Gaussians to find clusters</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">output &lt;-<span class="st"> </span><span class="kw"><a href="../reference/vimix.html">vimix</a></span>(data, <span class="dt">K =</span> <span class="dv">7</span>, <span class="dt">indep =</span> T, <span class="dt">verbose =</span> T)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">## Convert data matrix and cluster labels to data.frame</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/broom/topics/tidy">tidy</a></span>(data)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">df<span class="op">$</span>label &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">as.factor</a></span>(output<span class="op">$</span>label)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">## Plot clusters</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(df, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(X1, X2, <span class="dt">col =</span> label)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">maxK &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">n_random_starts &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">ELBO &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, maxK<span class="dv">-1</span>, n_random_starts)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>maxK){</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_random_starts){</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">        output &lt;-<span class="st"> </span><span class="kw"><a href="../reference/vimix.html">vimix</a></span>(data, <span class="dt">K =</span> k)</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">        ELBO[k<span class="dv">-1</span>,j] &lt;-<span class="st"> </span>output<span class="op">$</span>L[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(output<span class="op">$</span>L)]</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">    }</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(reshape)</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">ELBO &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/reshape/topics/melt-24">melt</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/t">t</a></span>(ELBO))</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(ELBO) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'start_n'</span>, <span class="st">'K'</span>, <span class="st">'ELBO'</span>)</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14">ELBO<span class="op">$</span>K &lt;-<span class="st"> </span>ELBO<span class="op">$</span>K <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(ELBO, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> K, <span class="dt">y =</span> ELBO)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>()</a></code></pre></div>
+<p><img src="vimix_files/figure-html/example1-figure10-7-1.png" width="700"></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">## Use variational inference for mixture of Gaussians to find clusters</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">output &lt;-<span class="st"> </span><span class="kw"><a href="../reference/vimix.html">vimix</a></span>(data, <span class="dt">K =</span> <span class="dv">7</span>, <span class="dt">indep =</span> T, <span class="dt">verbose =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">## Convert data matrix and cluster labels to data.frame</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/broom/topics/tidy">tidy</a></span>(data)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">df<span class="op">$</span>label &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">as.factor</a></span>(output<span class="op">$</span>label)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">## Plot clusters</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(df, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(X1, X2, <span class="dt">col =</span> label)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a></code></pre></div>
 <p><img src="vimix_files/figure-html/example1-ind-plot-1.png" width="700"></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">## Check that the lower bound is monotonically increasing</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">lb &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/broom/topics/tidy">tidy</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">lb<span class="op">$</span>lower_bound &lt;-<span class="st"> </span>lb<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">lb<span class="op">$</span>x &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">lb<span class="op">$</span>iter &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>]))</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">lb<span class="op">$</span>number_clusters &lt;-<span class="st"> </span>output<span class="op">$</span>Cl[<span class="op">-</span><span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">## Plot clusters</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">plot_lc &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(lb, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>iter,<span class="dt">y=</span>lower_bound)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">## Plot number of non-empty clusters</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">plot_nc &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(lb, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>iter,<span class="dt">y=</span>number_clusters)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(plot_lb, plot_nc, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## Check that the lower bound is monotonically increasing</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">lb &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/broom/topics/tidy">tidy</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">lb<span class="op">$</span>ELBO &lt;-<span class="st"> </span>lb<span class="op">$</span>x</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">lb<span class="op">$</span>x &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">lb<span class="op">$</span>iter &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>]))</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">lb<span class="op">$</span>number_clusters &lt;-<span class="st"> </span>output<span class="op">$</span>Cl[<span class="op">-</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">## Plot clusters</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">plot_lc &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(lb, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>iter,<span class="dt">y=</span>ELBO)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">## Plot number of non-empty clusters</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">plot_nc &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(lb, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span>iter,<span class="dt">y=</span>number_clusters)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>()</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(plot_lb, plot_nc, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="vimix_files/figure-html/example1-ind-lb-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">maxK &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">n_random_starts &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">ELBO &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, maxK<span class="dv">-1</span>, n_random_starts)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>maxK){</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">    <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n_random_starts){</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">        output &lt;-<span class="st"> </span><span class="kw"><a href="../reference/vimix.html">vimix</a></span>(data, <span class="dt">K =</span> k, <span class="dt">indep =</span> T)</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">        ELBO[k<span class="dv">-1</span>,j] &lt;-<span class="st"> </span>output<span class="op">$</span>L[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(output<span class="op">$</span>L)]</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">    }</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">}</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(reshape)</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">ELBO &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/reshape/topics/melt-24">melt</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/t">t</a></span>(ELBO))</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(ELBO) &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'start_n'</span>, <span class="st">'K'</span>, <span class="st">'ELBO'</span>)</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">ELBO<span class="op">$</span>K &lt;-<span class="st"> </span>ELBO<span class="op">$</span>K <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(ELBO, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> K, <span class="dt">y =</span> ELBO)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>()</a></code></pre></div>
+<p><img src="vimix_files/figure-html/example1-ind-figure10-7-1.png" width="700"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
