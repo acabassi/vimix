@@ -17,15 +17,15 @@ maximizeCatGauss = function(X, model, prior){
     N = dim(X)[1]
     D = dim(X)[2]
     K = dim(Resp)[2]
-    nCat = dim(eps)[3]
+    maxNCat = dim(eps)[3]
 
     Nk = colSums(Resp) + 1e-10 # (10.51)
     alpha = alpha0 + Nk # (10.58)
 
-    eps = array(0, c(K, D, nCat))
-    for(i in 1:D){
-        for(j in 1:nCat){
-            eps[,i,j] = eps[,i,j] + t(Resp)%*%(X[,i]==j)
+    eps = array(0, c(K, D, maxNCat))
+    for(d in 1:D){
+        for(j in 1:maxNCat){
+            eps[,d,j] = eps0[d,j] + t(Resp)%*%(X[,d]==j)
         }
     }
 

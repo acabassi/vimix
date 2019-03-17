@@ -31,30 +31,31 @@ boundCatGauss = function(X, model, prior){
     logCalpha = lgamma(sum(alpha))-sum(lgamma(alpha))
     Eqpi = logCalpha + sum((alpha-1)*logpi)# (10.76)
 
-    logCeps = array(0, c(K, D))
-    ElnPhi = array(0, c(K,D,nCat))
     EpX = EpPhi = EqPhi = 0
 
-    for(k in 1:K){ ## TODO this is extremely inefficient but it's just to check if everything works
-        for(d in 1:D){
+    for(d in 1:D){
 
-            maxXd = max(X[,d])
-            logPhi0 = digamma(eps0[d,1:maxXd]) - digamma(sum(eps0[d,1:maxXd]))
-            logCeps0 = lgamma(sum(eps0[d,1:maxXd])) - sum(lgamma(eps0[d,1:maxXd]))
-            EpPhi = EpPhi + logCeps0 + sum((eps0[d,1:maxXd]-1)*logPhi0)
+        maxXd = max(X[,d])
 
-            logPhi = digamma(eps[k,d,1:maxXd]) - digamma(sum(eps[k,d,1:maxXd]))
+        logCeps0 = lgamma(sum(eps0[d,1:maxXd])) - sum(lgamma(eps0[d,1:maxXd]))
+        logPhi0 = digamma(eps0[d,1:maxXd]) - digamma(sum(eps0[d,1:maxXd]))
+        EpPhi = EpPhi + K*(logCeps0 + sum((eps0[d,1:maxXd]-1)*logPhi0))
+
+        for(k in 1:K){ ## TODO this is extremely inefficient but it's just to check if everything works
+
             logCeps = lgamma(sum(eps[k,d,1:maxXd])) - sum(lgamma(eps[k,d,1:maxXd]))
+            logPhi = digamma(eps[k,d,1:maxXd]) - digamma(sum(eps[k,d,1:maxXd]))
             EqPhi = EqPhi + logCeps + sum((eps[k,d,1:maxXd]-1)*logPhi)
 
-            for(n in 1:N){
-                EpX = EpX + Resp[n,k]*logPhi[X[n,d]]
+            for(obs in 1:N){
+                EpX = EpX + Resp[obs,k]*logPhi[X[obs,d]]
             }
         }
     }
 
     L = Epz - Eqz + Eppi - Eqpi + EpPhi - EqPhi + EpX
 
+    if(is.nan(L)) stop("Lower bound in NaN")
     if(!is.finite(L)) stop("Lower bound is not finite")
 
     L

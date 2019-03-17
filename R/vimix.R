@@ -12,7 +12,7 @@
 #' @references Bishop, C.M., 2006. Pattern recognition and machine learning. Springer.
 #' @export
 #'
-vimixCatGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
+vimixCatGauss = function(X, K, prior, init = "kmeans", tol = 10e-5,
                             maxiter = 2000, verbose = F){
 
     if(verbose) message(sprintf("Mixture of univariate Gaussians \n"))
@@ -27,7 +27,7 @@ vimixCatGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     maxNCat <- max(X, na.rm=TRUE) # max number of categories among all features
     nCat <- as.vector(apply(X, 2, max))
 
-    L = Cl = rep(-Inf,maxiter)
+    L = Cl = rep(-Inf,maxiter*2)
 
     if(missing(prior)){ # set default prior
         prior = list(alpha = 1/K)
@@ -38,23 +38,32 @@ vimixCatGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     }
 
     # model initialisation
+    labelInit <- klaR::kmodes(X, modes = K)$cluster
     EPSreshape = prior$eps
     dim(EPSreshape) = c(1,D,maxNCat)
     model = list(alpha = rep(prior$alpha, K),
                  eps = EPSreshape[rep(1,K),,])
+    for(i in 1:D){
+        for(j in 1:nCat[i]){
+            for(k in 1:K){
+                model$eps[k,i,j] = prior$eps[i,j] + sum((X[,i]==j)*(labelInit==k))
+            }
+        }
+    }
 
     for (iter in 2:maxiter){
         if(verbose) message(sprintf("Iteration number %d. ", iter))
 
         model = expectCatGauss(X, model) # Expectation step
+        L[iter*2-1] = boundCatGauss(X, model, prior)/N # Lower bound
         model = maximizeCatGauss(X, model, prior) # Maximisation step
-        L[iter] = boundCatGauss(X, model, prior)/N # Lower bound
+        L[iter*2] = boundCatGauss(X, model, prior)/N # Lower bound
         Cl[iter] = sum(colSums(model$Resp) > 10e-10*N) # Non-empty clusters
 
-        if(check_convergence(L, iter, tol, maxiter, verbose)) break # check for convergence
+        if(check_convergence(L, iter*2, tol, maxiter, verbose)) break # check for convergence
     }
 
-    output = list(L = L[1:iter], Cl = Cl[1:iter],
+    output = list(L = L[1:(iter*2)], Cl = Cl[1:iter],
                   label = apply(model$R, 1, which.max), model=model)
 }
 

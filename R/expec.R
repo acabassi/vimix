@@ -18,10 +18,11 @@ expectCatGauss = function(X, model){
     ElnPi = digamma(alpha) - digamma(sum(alpha)) # K-dimensional vector
     logRho = matrix(ElnPi, N, K, byrow = TRUE)
 
-    for(n in 1:N){ ## TODO make this more efficient by using apply()
+    for(obs in 1:N){ ## TODO make this more efficient by using apply()
         for(k in 1:K){
-            for(i in 1:D){
-                logRho[n,k] = logRho[n,k] + digamma(eps[k,i,X[n,i]]) - digamma(sum(eps[k,i,])) # K-dimensional vector
+            for(d in 1:D){
+                maxXd = max(X[,d])
+                logRho[obs,k] = logRho[obs,k] + digamma(eps[k,d,X[obs,d]]) - digamma(sum(eps[k,d,1:maxXd]))
             }
         }
     }
