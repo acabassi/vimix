@@ -3,6 +3,9 @@
 #' @param X NxD data matrix.
 #' @param K (Maximum) number of clusters.
 #' @param prior Prior parameters (optional).
+#' @param init Initialisation method (optional). If it is a vector, it is interpreted as the vector of initial
+#' cluster allocations. If it is a string, it is interpreted as the name of the clustering algorithm used for
+#' the initialisation (only "kmeans" and "random") available at the moment).
 #' @param tol Tolerance on lower bound. Default is 10e-20.
 #' @param maxiter Maximum number of iterations of the VB algorithm. Default is 2000.
 #' @param verbose Boolean flag which, if TRUE, prints the iteration numbers. Default is FALSE.
@@ -12,7 +15,7 @@
 #' @references Bishop, C.M., 2006. Pattern recognition and machine learning. Springer.
 #' @export
 #'
-vimixCatGauss = function(X, K, prior, init = "kmeans", tol = 10e-5,
+vimixCatGauss = function(X, K, prior, init = "kmodes", tol = 10e-5,
                             maxiter = 2000, verbose = F){
 
     if(verbose) message(sprintf("Mixture of univariate Gaussians \n"))

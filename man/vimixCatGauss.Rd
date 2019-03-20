@@ -4,7 +4,7 @@
 \alias{vimixCatGauss}
 \title{Variational Bayesian inference for unsupervised clustering, mixture of categorical variables}
 \usage{
-vimixCatGauss(X, K, prior, init = "kmeans", tol = 1e-19,
+vimixCatGauss(X, K, prior, init = "kmodes", tol = 1e-04,
   maxiter = 2000, verbose = F)
 }
 \arguments{
@@ -13,6 +13,10 @@ vimixCatGauss(X, K, prior, init = "kmeans", tol = 1e-19,
 \item{K}{(Maximum) number of clusters.}
 
 \item{prior}{Prior parameters (optional).}
+
+\item{init}{Initialisation method (optional). If it is a vector, it is interpreted as the vector of initial
+cluster allocations. If it is a string, it is interpreted as the name of the clustering algorithm used for
+the initialisation (only "kmeans" and "random") available at the moment).}
 
 \item{tol}{Tolerance on lower bound. Default is 10e-20.}
 
