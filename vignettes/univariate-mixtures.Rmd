@@ -1,10 +1,10 @@
 ---
-title: "2. Mixtures of univariate Gaussians"
+title: "Mixtures of univariate Gaussian distributions"
 author: "Alessandra Cabassi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Mixtures of univariate Gaussians}
+  %\VignetteIndexEntry{Mixtures of univariate Gaussian distributions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
