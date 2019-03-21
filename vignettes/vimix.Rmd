@@ -1,5 +1,5 @@
 ---
-title: "1. Introduction to vimix"
+title: "Mixtures of multivariate Gaussian distributions"
 author: "Alessandra Cabassi"
 date: "`r Sys.Date()`"
 output: 
@@ -8,7 +8,7 @@ output:
       theme: united
       toc: yes
 vignette: >
-  %\VignetteIndexEntry{1. Introduction to vimix}
+  %\VignetteIndexEntry{Mixtures of multivariate Gaussian distributions}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

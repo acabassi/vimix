@@ -34,11 +34,8 @@ cluster labels, model, a list containing the trained model structure.
 Variational Bayesian inference for unsupervised clustering
 }
 \examples{
-## Load a dataset containing 200 2-dimensional data points
-data <- as.matrix(read.csv(system.file("extdata", "example1-data.csv", package = "vimix"),
-row.names = 1))
-
-## Use variational inference for mixture of Gaussians to find clusters
+library(mvtnorm)
+data <- rbind(rmvnorm(100,c(-3,0)), rmvnorm(100,c(3,0)))
 output <- vimix(data, 2)
 }
 \references{
