@@ -51,6 +51,9 @@
 #'  abbreviations.
 #'
 #' @references
+#'   C. Ahlmann-Eltze and C. Yau, "MixDir: Scalable Bayesian Clustering for High-Dimensional Categorical Data", 2018
+#'   IEEE 5th International Conference on Data Science and Advanced Analytics (DSAA), Turin, Italy, 2018, pp. 526-539.
+#'
 #'   Blake, C.L. & Merz, C.J. (1998).
 #'   UCI Repository of Machine Learning Databases.
 #'   Irvine, CA: University of California, Department of Information and

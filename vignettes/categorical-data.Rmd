@@ -53,12 +53,12 @@ plot_lb
 ```
 
 ```{r example1-ind-figure10-7, fig.show='hold', message=FALSE, warning = FALSE, cache=TRUE}
-maxK <- 10
-n_random_starts <- 20
+maxK <- 4
+n_random_starts <- 100
 ELBO <- matrix(0, maxK-1, n_random_starts)
 for(k in 2:maxK){
     for(j in 1:n_random_starts){
-        output <- vimix(mushroom[1:100,], K = k, indep = T)
+        output <- vimix(mushroom[1:50,], K = k, indep = T)
         ELBO[k-1,j] <- output$L[length(output$L)]
     }
 }
