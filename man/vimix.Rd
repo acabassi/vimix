@@ -4,8 +4,8 @@
 \alias{vimix}
 \title{Variational Bayesian inference for unsupervised clustering}
 \usage{
-vimix(X, K, prior, indep = F, init = "kmeans", tol = 1e-04,
-  maxiter = 2000, verbose = F)
+vimix(X, K, prior, indep = F, init = "kmeans", select = F,
+  tol = 1e-04, maxiter = 2000, verbose = F)
 }
 \arguments{
 \item{X}{NxD data matrix.}
@@ -19,6 +19,8 @@ vimix(X, K, prior, indep = F, init = "kmeans", tol = 1e-04,
 \item{init}{Initialisation method (optional). If it is a vector, it is interpreted as the vector of initial
 cluster allocations. If it is a string, it is interpreted as the name of the clustering algorithm used for
 the initialisation (only "kmeans" and "random") available at the moment).}
+
+\item{select}{Boolean flag. If TRUE, variable selection is used. Default is FALSE.}
 
 \item{tol}{Tolerance on lower bound. Default is 10e-20.}
 
