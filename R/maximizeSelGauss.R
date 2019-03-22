@@ -29,17 +29,17 @@ maximizeSelGauss = function(X, model, prior, null){
 
     c_new = rep(NA, D)
     for(d in 1:D){
-        ElnGammad = digamma(c[d] + o) - digamma(2*d + 1)
+        ElnGammad = digamma(c[d]+o) - digamma(2*o + 1)
         lnNu1d = ElnGammad + sum(Resp*Elnf[d,,])
 
-        ElnOneMinusGammad = digamma(1-c[d]+o) - digamma(2*d + 1)
+        ElnOneMinusGammad = digamma(1-c[d]+o) - digamma(2*o + 1)
         lnNu2d = ElnOneMinusGammad + sum(Resp*matrix(lnf_null[,d], N, K, byrow = F))
 
         c_new[d] = lnNu1d / (lnNu1d + lnNu2d)
     }
 
 
-    Nk = colSums(Resp) + 1e-10 # (10.51)
+    Nk = colSums(Resp) # (10.51)
     Ndk = matrix(rep(Nk,D), K, D) # KxD matrix
     Ndk = t(Ndk * matrix(c, K, D, byrow = T))
 
@@ -52,7 +52,7 @@ maximizeSelGauss = function(X, model, prior, null){
         x_cen = sweep(X, MARGIN = 2, STATS = xbar[,k], FUN = "-")
         S[,k] = (t(x_cen^2)%*%Resp[,k])/Nk[k] # (10.53)
         for(d in 1:D){
-            m[d,k] = (beta0*m0+Ndk[d,k]*xbar[d,k])/beta[k] # (10.61)
+            m[d,k] = (beta0*m0+Ndk[d,k]*xbar[d,k])/beta[d,k] # (10.61)
             W[d,k] = 1/W0[d] + Ndk[d,k]*S[d,k] + ((beta0*Ndk[d,k])/(beta0+Ndk[d,k]))*((xbar[d,k]-m0)^2) # (10.62)
             W[d,k] = 1/W[d,k]
         }
@@ -66,5 +66,7 @@ maximizeSelGauss = function(X, model, prior, null){
     model$S = S
     model$xbar = xbar
     model$c = c_new
+    model$Nk = Nk
+    model$Ndk = Ndk
     model
 }
