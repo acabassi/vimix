@@ -23,7 +23,7 @@ expectUniGauss = function(X, model){
 
     for (k in 1:K){
 
-        ElnLa = D*log(2*pi) + log(0.5 * (1/W[k])) + digamma(0.5*v[k]) # (10.65)
+        ElnLa = D*log(2*pi) - log(0.5 * (1/W[k])) + digamma(0.5*v[k]) # (10.65)
         ExmuLaxmu = 1/beta[k] + v[k]*((X-m[k])^2)*W[k] # (10.64)
         logRho[,k] = ElnPi[k] + 0.5*ElnLa - 0.5*ExmuLaxmu # (10.46)
 
