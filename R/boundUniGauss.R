@@ -11,7 +11,6 @@ boundUniGauss = function(X, model, prior){
     v0 = prior$v
     m0 = prior$m
     W0 = prior$W
-    W0inv = prior$Winv
 
     alpha = model$alpha
     beta = model$beta
@@ -42,9 +41,9 @@ boundUniGauss = function(X, model, prior){
     log_Lambda <- rep(0,K)
 
     for(k in 1:K){
-        log_Lambda[k] <- digamma(v[k]/2) + log(0.5/W[k])
-        EpX <- EpX + Nk[k] * (log_Lambda[k] - D/beta[k] -
-                                  v[k]*W[k]*sum((X - m[k])^2) - D*log(2*pi))
+        log_Lambda[k] <- digamma(0.5*v[k]) - log(0.5/W[k])
+        EpX <- EpX + sum(Resp[,k] * (log_Lambda[k] - D/beta[k] -
+                                  v[k]*W[k]*(X - m[k])^2 - D*log(2*pi)))
 
         # (10.74)
         EpMuLambda <- EpMuLambda + D*log(beta0/(2*pi)) + log_Lambda[k] -
@@ -52,23 +51,14 @@ boundUniGauss = function(X, model, prior){
         EpMuLambda2 <- EpMuLambda2 + v[k] * W[k] / W0
 
         # (10.77)
-        EqMuLambda <- EqMuLambda + 0.5*log_Lambda[k] + 0.5*D*log(beta[k]/(2*pi)) - logUniB(W[k], v[k]) -
-            0.5*(v[k] - D - 1)*log_Lambda[k] + 0.5*v[k]*D
+        EqMuLambda <- EqMuLambda + 0.5*D*log(beta[k]/(2*pi)) - logUniB(W[k], v[k]) -
+            0.5*(v[k] - 1)*log_Lambda[k] + 0.5*v[k]*D
     }
 
-    EpMuLambda <- 0.5*EpMuLambda + K*(logUniB(W0, v0)) + 0.5*(v0 - D - 1)*sum(log_Lambda) - 0.5*EpMuLambda2 # 10.74
+    EpMuLambda <- 0.5*EpMuLambda + K*D*(logUniB(W0, v0)) + 0.5*(v0 - D - 1)*sum(log_Lambda) - 0.5*EpMuLambda2 # 10.74
     EpX  <- 0.5 * EpX # (10.71)
 
     L = Epz - Eqz + Eppi - Eqpi + EpMuLambda - EqMuLambda + EpX
     if(!is.finite(L)) stop("Lower bound is not finite")
     L
-}
-
-#' Compute univariate equivalent of logB
-#' @param W Da rivedere
-#' @param nu Da rivedere
-logUniB <- function(W, nu){
-    Winv <- 1/W
-    if(is.na(lgamma(0.5 * nu))) stop()
-    return(lgamma(0.5 * nu) + 0.5 * nu * log(0.5*Winv))
 }
