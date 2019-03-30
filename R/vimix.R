@@ -29,7 +29,7 @@ vimix = function(X, K, prior, indep = F, init = "kmeans", select = F,
     }else if(is.list(X) & select){
         stop('Variable selection for categorical data has not been implemented yet.')
     }else if(is.list(X)){
-        output = vimixCatGauss(X, K, prior, init, tol, maxiter, verbose)
+        output = vimixCat(X, K, prior, init, tol, maxiter, verbose)
     }else if(indep & !select){
         output = vimixIndGauss(X, K, prior, init, tol, maxiter, verbose)
     }else if(select){
