@@ -15,7 +15,7 @@
 #' @references Bishop, C.M., 2006. Pattern recognition and machine learning. Springer.
 #' @export
 #'
-vimixCatGauss = function(X, K, prior, init = "kmodes", tol = 10e-5,
+vimixCat = function(X, K, prior, init = "kmodes", tol = 10e-5,
                          maxiter = 2000, verbose = F){
 
     if(verbose) message(sprintf("Mixture of univariate Gaussians \n"))
