@@ -2,7 +2,11 @@
 title: "Mixtures of univariate Gaussian distributions"
 author: "Alessandra Cabassi"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+    html_document:
+      fig_width: 8
+      theme: united
+      toc: no
 vignette: >
   %\VignetteIndexEntry{Mixtures of univariate Gaussian distributions}
   %\VignetteEngine{knitr::rmarkdown}
@@ -21,16 +25,17 @@ knitr::opts_chunk$set(
 library(vimix)
 
 ## Load a dataset containing 200 2-dimensional data points
-data <- c(rnorm(100,-3), rnorm(100,3))
+data <- c(rnorm(1000,-3), rnorm(1000,3))
 
 ## Use variational inference for mixture of Gaussians to find clusters
-output <- vimix(data, 3)
+output <- vimix(data, 10)
 ```
 
 ```{r exampleuni-plot, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Plot cluster labels
 library(ggplot2)
 library(broom)
+library(gridExtra)
 
 ## Convert data matrix and cluster labels to data.frame
 data <- tidy(data)
@@ -39,14 +44,45 @@ data$label <- as.factor(output$label)
 ## Plot clusters
 ggplot(data, aes(x = x, col = label)) + geom_histogram()
 ```
+
+
 ```{r exampleuni-lb, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Check that the lower bound is monotonically increasing
 
 lb <- tidy(output$L[-1])
-lb$lower_bound <- lb$x
+lb$ELBO <- lb$x
 lb$x <- NULL
 lb$iter <- c(1:length(output$L[-1]))
+lb$number_clusters <- output$Cl[-1]
 
 ## Plot clusters
-ggplot(lb, aes(x=iter,y=lower_bound)) + geom_line(linetype = "dashed") + geom_point()
+plot_lb <- ggplot(lb, aes(x=iter,y=ELBO)) + geom_line(linetype = "dashed") + geom_point()
+
+## Plot number of non-empty clusters
+plot_nc <- ggplot(lb, aes(x=iter,y=number_clusters)) + geom_line(linetype = "dashed") + geom_point()
+
+grid.arrange(plot_lb, plot_nc, ncol = 2)
+```
+
+
+
+```{r exampleuni-figure10-7, fig.show='hold', message=FALSE, warning = FALSE, cache=TRUE}
+data <- c(rnorm(1000,-3), rnorm(1000,3))
+
+maxK <- 10
+n_random_starts <- 20
+ELBO <- matrix(0, maxK-1, n_random_starts)
+for(k in 2:maxK){
+    for(j in 1:n_random_starts){
+        output <- vimix(data, K = k)
+        ELBO[k-1,j] <- output$L[length(output$L)]
+    }
+}
+
+library(reshape)
+ELBO <- melt(t(ELBO))
+names(ELBO) <- c('start_n', 'K', 'ELBO')
+ELBO$K <- ELBO$K + 1
+
+ggplot(ELBO, aes(x = K, y = ELBO)) + geom_point() + geom_jitter()
 ```
