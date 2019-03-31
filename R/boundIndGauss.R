@@ -44,24 +44,24 @@ boundIndGauss = function(X, model, prior){
     log_Lambda <- rep(0,K)
 
     for(k in 1:K){
-        log_Lambda[k] <- D*digamma(v[k]/2) + sum(log(0.5 /W[,k]))
+        log_Lambda[k] <- D*digamma(v[k] / 2) -  sum(log(0.5 / W[,k]))
         pollo <- sweep(X, 2, m[,k], FUN = "-")
-        EpX <- EpX + Nk[k] * (log_Lambda[k] - D/beta[k] -
-                                  v[k]*sum((pollo)^2%*%W[,k]) - D*log(2*pi))
+        EpX <- EpX + sum(Resp[,k] * (log_Lambda[k] - D/beta[k] -
+                                  v[k]*(pollo)^2%*%W[,k] - D*log(2*pi)))
 
         # (10.74)
-        EpMuLambda1 <- EpMuLambda1 + D*log(beta0/(2*pi)) + log_Lambda[k] -
+        EpMuLambda1 <- EpMuLambda1 + D*log(beta0/(2*pi)) -
             (D*beta0)/beta[k] - sum(beta0*v[k]*((m[,k] - m0)^2) * W[,k])
         EpMuLambda2 <- EpMuLambda2 + sum(v[k] * W[,k] / W0)
 
         # (10.77)
-        EqMuLambda <- EqMuLambda + 0.5*D*log(beta[k]/(2*pi)) - sum(logUniB(W[,k], v[k])) -
-            D*0.5*(v[k] - 1)*log_Lambda[k] + 0.5*D*(v[k]+1)
-        # I'm not 100% sure about the D*(v0 *0.5 - 1)*sum(log_Lambda) term.
+        EqMuLambda <- EqMuLambda + 0.5*D*log(beta[k]/(2*pi)) + sum(logUniB(W[,k], v[k])) + 
+            0.5*(v[k] - 1)*log_Lambda[k] - 0.5*D*(v[k]+1)
+        # I'm not 100% sure about the D*(v0 *0.5 - 1)*log_Lambda[k] term.
         # It would be nicer if it matched the multivariate case: 0.5*(v[k] - D - 1)*log_Lambda[k]
     }
 
-    EpMuLambda <- 0.5*EpMuLambda1 + K*D*sum(logUniB(W0, v0)) + D*(v0 *0.5 - 1)*sum(log_Lambda) - 0.5*EpMuLambda2 # 10.74
+    EpMuLambda <- 0.5*EpMuLambda1 + K*D*sum(logUniB(W0, v0)) + 0.5 * (v0 - 1)*sum(log_Lambda) - 0.5*EpMuLambda2 # 10.74
     # I'm not 100% sure about the D*(v0 *0.5 - 1)*sum(log_Lambda) term.
     # It would be nicer if it matched the multivariate case:  0.5*(v0 - D - 1)*sum(log_Lambda)
 
