@@ -23,9 +23,11 @@ expectIndGauss = function(X, model){
 
     for (k in 1:K){
 
-        ElnLa = D*log(2*pi) + sum(log(0.5 * (1/W[,k]))) + digamma(0.5*v[k]) # (10.65)
+        ElnLa = D*log(2*pi) + sum( - log(0.5 * (1/W[,k]))) + digamma(0.5*v[k]) # (10.65)
         diff = sweep(X, 2, m[,k], FUN="-")
-        ExmuLaxmu = 1/beta[k]; for(d in 1:D) ExmuLaxmu = ExmuLaxmu + v[k]*(diff[,d]^2)*W[d,k] # (10.64)
+        ExmuLaxmu = 1/beta[k]; 
+        for(d in 1:D) 
+            ExmuLaxmu = ExmuLaxmu + v[k]*(diff[,d]^2)*W[d,k] # (10.64)
         logRho[,k] = ElnPi[k] + 0.5*ElnLa - 0.5*ExmuLaxmu # (10.46)
 
     }
