@@ -51,8 +51,8 @@ boundUniGauss = function(X, model, prior){
         EpMuLambda2 <- EpMuLambda2 + v[k] * W[k] / W0
 
         # (10.77)
-        EqMuLambda <- EqMuLambda + 0.5*D*log(beta[k]/(2*pi)) - logUniB(W[k], v[k]) -
-            0.5*(v[k] - 1)*log_Lambda[k] + 0.5*v[k]*D
+        EqMuLambda <- EqMuLambda + 0.5*D*log(beta[k]/(2*pi)) + logUniB(W[k], v[k]) +
+            0.5*(v[k] - 1)*log_Lambda[k] - 0.5*D*(v[k]+1)
     }
 
     EpMuLambda <- 0.5*EpMuLambda + K*D*(logUniB(W0, v0)) + 0.5*(v0 - D - 1)*sum(log_Lambda) - 0.5*EpMuLambda2 # 10.74
