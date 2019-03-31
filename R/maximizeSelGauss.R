@@ -6,7 +6,7 @@
 #' @return Updated model parameters
 #' @export
 #'
-maximizeSelGauss = function(X, model, prior, null){
+maximizeSelGauss = function(X, model, prior){
 
     alpha0 = prior$alpha
     beta0 = prior$beta
@@ -19,7 +19,7 @@ maximizeSelGauss = function(X, model, prior, null){
     c = model$c
     Elnf = model$Elnf # DxNxK
 
-    lnf_null = null$lnf
+    lnf_null = model$lnf
 
     N = dim(X)[1]
     D = dim(X)[2]
@@ -29,6 +29,7 @@ maximizeSelGauss = function(X, model, prior, null){
 
     c_new = rep(NA, D)
     for(d in 1:D){
+        
         ElnGammad = digamma(c[d]+o) - digamma(2*o + 1)
         lnNu1d = ElnGammad + sum(Resp*Elnf[d,,])
 
@@ -52,8 +53,8 @@ maximizeSelGauss = function(X, model, prior, null){
         x_cen = sweep(X, MARGIN = 2, STATS = xbar[,k], FUN = "-")
         S[,k] = (t(x_cen^2)%*%Resp[,k])/Nk[k] # (10.53)
         for(d in 1:D){
-            m[d,k] = (beta0*m0+Ndk[d,k]*xbar[d,k])/beta[d,k] # (10.61)
-            W[d,k] = 1/W0[d] + Ndk[d,k]*S[d,k] + ((beta0*Ndk[d,k])/(beta0+Ndk[d,k]))*((xbar[d,k]-m0)^2) # (10.62)
+            m[d,k] = (beta0*m0[d]+Ndk[d,k]*xbar[d,k])/beta[d,k] # (10.61)
+            W[d,k] = 1/W0[d] + Ndk[d,k]*S[d,k] + ((beta0*Ndk[d,k])/(beta0+Ndk[d,k]))*((xbar[d,k]-m0[d])^2) # (10.62)
             W[d,k] = 1/W[d,k]
         }
     }

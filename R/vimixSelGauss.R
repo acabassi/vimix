@@ -27,10 +27,10 @@ vimixSelGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     N = dim(X)[1]
     D = dim(X)[2]
 
-    L = Cl = rep(-Inf,maxiter)
+    L = Cl = rep(-Inf, maxiter)
 
     if(missing(prior)){ # set default prior
-        prior = list(alpha = 1/K, beta = 1, m = mean(X), v = 50 + D, W = rep(1,D), o = 1)
+            prior = list(alpha = 1/K, beta = 1, m = colMeans(X), v = D + 50, W = rep(1,D), o = 0.5)
     }
 
     # model initialisation
@@ -41,14 +41,14 @@ vimixSelGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
                  m =  t(stats::kmeans(X, K, nstart = 25)$centers), # DxK matrix
                  v = matrix(prior$v, D, K),
                  W = Wreshape[, rep(1,K)], # DxK matrix
-                 c = rep(1, D))
+                 c = rep(.5, D))
 
-    null = list(m = colMeans(X),
-                stdev = apply(X, 2, stats::sd))
-    null$lnf = matrix(NA, N, D)
+    
+    lnf = matrix(NA, N, D)
     for(d in 1:D){
-        null$lnf[,d] = log(stats::dnorm(X[,d], mean = null$m[d], sd = null$stdev[d]))
+        lnf[,d] = log(stats::dnorm(X[,d], mean = prior$m[d], sd = apply(X, 2, stats::sd)[d]))
     }
+    model$lnf = lnf
 
     bound_list = list()
     model_list = list()
@@ -56,10 +56,10 @@ vimixSelGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     for (iter in 2:maxiter){
         if(verbose) message(sprintf("Iteration number %d. ", iter))
 
-        model = expectSelGauss(X, model, null) # Expectation step
-        model = maximizeSelGauss(X, model, prior, null) # Maximisation step
+        model = expectSelGauss(X, model) # Expectation step
+        model = maximizeSelGauss(X, model, prior) # Maximisation step
         model_list[[iter-1]] = model
-        bound_list[[iter-1]] = boundSelGauss(X, model, prior, null) # Lower bound
+        bound_list[[iter-1]] = boundSelGauss(X, model, prior) # Lower bound
         L[iter] = bound_list[[iter-1]]$L/N
         Cl[iter] = sum(colSums(model$Resp) > 10e-10*N) # Non-empty clusters
 
@@ -67,6 +67,6 @@ vimixSelGauss = function(X, K, prior, init = "kmeans", tol = 10e-20,
     }
 
     output = list(L = L[1:iter], Cl = Cl[1:iter],
-                  label = apply(model$R, 1, which.max), model = model, null = null, 
+                  label = apply(model$R, 1, which.max), model = model,
                   bound_list = bound_list, model_list = model_list)
 }
