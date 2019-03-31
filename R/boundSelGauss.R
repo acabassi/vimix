@@ -58,21 +58,21 @@ boundSelGauss = function(X, model, prior){
             log_Lambda[d,k] <- digamma(0.5 * v[d,k]) - log(0.5 / W[d,k])
 
             # (10.74)
-            EpMuLambda1 <- EpMuLambda1 + log(beta0/(2*pi)) + log_Lambda[d,k] -
+            EpMuLambda1 <- EpMuLambda1 + log(beta0/(2*pi)) -
                 beta0/beta[d,k] - beta0*v[d,k]*((m[d,k] - m0[d])^2) * W[d,k]
             EpMuLambda2 <- EpMuLambda2 + v[d,k] * W[d,k] / W0[d]
 
             # (10.77)
-            EqMuLambda <- EqMuLambda + 0.5*log(beta[d,k]/(2*pi)) - logUniB(W[d,k], v[d,k]) -
-                0.5*(v[d,k] - 1)*log_Lambda[d,k] + 0.5*(v[d,k]+1)
+            EqMuLambda <- EqMuLambda + 0.5*log(beta[d,k]/(2*pi)) - logUniB(W[d,k], v[d,k]) +
+                0.5*(v[d,k] - 1)*log_Lambda[d,k] - 0.5*(v[d,k]+1)
         
-            Elnf[d,,k] <- log_Lambda[d,k] - 1/beta[d,k] - v[d,k]*W[d,k]*sum((pollo[,d])^2)
-            EpX <- EpX + ((c[d]* sum(Elnf[d,,k]*Resp[,k])) + (1-c[d])*sum(lnf_null[,d]*Resp[,k]))
+            Elnf[d,,k] <- log_Lambda[d,k] - 1/beta[d,k] - v[d,k]*W[d,k]*sum((pollo[,d])^2) - log(2*pi)
+            EpX <- EpX + ((c[d] * sum(Elnf[d,,k] * Resp[,k])) + (1-c[d]) * sum(lnf_null[,d] * Resp[,k]))
 
         }
     }
     
-    EpMuLambda <- 0.5*EpMuLambda1 + K*D*sum(logUniB(W0, v0)) + (v0 *0.5 - 1)*sum(log_Lambda) - 0.5*EpMuLambda2 # 10.74
+    EpMuLambda <- 0.5 * EpMuLambda1 + K * D * sum(logUniB(W0, v0)) + 0.5 * (v0 - 1) * sum(log_Lambda) - 0.5 * EpMuLambda2 # 10.74
     
     for(i in 1:D){
         ElnGammad <- digamma(c[d] + o) - digamma(2*o + 1)
