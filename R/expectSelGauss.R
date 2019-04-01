@@ -12,7 +12,7 @@ expectSelGauss = function(X, model){
     beta = model$beta
     m = model$m
     W = model$W
-    c = model$c
+    cc = model$c
 
     lnf_null = model$lnf
 
@@ -31,8 +31,8 @@ expectSelGauss = function(X, model){
 
         secondTerm = rep(0, N)
         for(d in 1:D){
-            Elnf[d,,k] = 0.5 * (- log(2*pi) + log(0.5/W[d,k]) - digamma(0.5*v[d,k]) - v[d,k]*(diff[,d]^2)*W[d,k] - 1/beta[d,k]) # (10.46)
-            secondTerm = secondTerm + c[d]*Elnf[d,,k] + (1-c[d])*lnf_null[,d]
+            Elnf[d,,k] = 0.5 * (log(2*pi) - log(0.5/W[d,k]) + digamma(0.5*v[d,k]) - v[d,k]*(diff[,d]^2)*W[d,k] - 1/beta[d,k]) # (10.46)
+            secondTerm = secondTerm + cc[d]*Elnf[d,,k] + (1-cc[d])*lnf_null[,d]
         }
         logRho[,k] = ElnPi[k] + secondTerm
 

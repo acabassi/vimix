@@ -22,7 +22,7 @@
 #' @export
 #'
 vimix = function(X, K, prior, indep = F, init = "kmeans", select = F,
-                 tol = 10e-5, maxiter = 2000, verbose = F){
+                 tol = 10e-10, maxiter = 2000, verbose = F){
 
     if(is.vector(X)){
         output = vimixUniGauss(X, K, prior, init, tol, maxiter, verbose)

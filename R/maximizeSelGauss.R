@@ -36,11 +36,11 @@ maximizeSelGauss = function(X, model, prior){
         ElnOneMinusGammad = digamma(1-c[d]+o) - digamma(2*o + 1)
         lnNu2d = ElnOneMinusGammad + sum(Resp*matrix(lnf_null[,d], N, K, byrow = F))
 
-        c_new[d] = lnNu1d / (lnNu1d + lnNu2d)
+        c_new[d] = 1 # exp( lnNu1d - log_sum_exp(c(lnNu1d, lnNu2d)) )
     }
 
 
-    Nk = colSums(Resp) # (10.51)
+    Nk = colSums(Resp) + 1e-10 # (10.51)
     Ndk = matrix(rep(Nk,D), K, D) # KxD matrix
     Ndk = t(Ndk * matrix(c, K, D, byrow = T))
 
@@ -57,6 +57,7 @@ maximizeSelGauss = function(X, model, prior){
             W[d,k] = 1/W0[d] + Ndk[d,k]*S[d,k] + ((beta0*Ndk[d,k])/(beta0+Ndk[d,k]))*((xbar[d,k]-m0[d])^2) # (10.62)
             W[d,k] = 1/W[d,k]
         }
+        
     }
 
     model$alpha = alpha

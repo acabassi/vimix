@@ -44,10 +44,13 @@ boundIndGauss = function(X, model, prior){
     log_Lambda <- rep(0,K)
 
     for(k in 1:K){
-        log_Lambda[k] <- D*digamma(v[k] / 2) -  sum(log(0.5 / W[,k]))
+        
+        log_Lambda[k] <- D*digamma(0.5 * v[k]) -  sum(log(0.5 / W[,k]))
+        
         pollo <- sweep(X, 2, m[,k], FUN = "-")
-        EpX <- EpX + sum(Resp[,k] * (log_Lambda[k] - D/beta[k] -
-                                  v[k]*(pollo)^2%*%W[,k] - D*log(2*pi)))
+        
+        Elnf <- log_Lambda[k] - D/beta[k] - v[k]*(pollo)^2%*%W[,k] - D*log(2*pi)
+        EpX <- EpX + sum(Resp[,k] * Elnf)
 
         # (10.74)
         EpMuLambda1 <- EpMuLambda1 + D*log(beta0/(2*pi)) -
