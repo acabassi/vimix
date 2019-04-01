@@ -4,7 +4,7 @@
 \alias{boundSelGauss}
 \title{Lower bound for independent Gaussian}
 \usage{
-boundSelGauss(X, model, prior, null)
+boundSelGauss(X, model, prior)
 }
 \arguments{
 \item{X}{NxD matrix data}

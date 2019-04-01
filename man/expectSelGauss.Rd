@@ -4,7 +4,7 @@
 \alias{expectSelGauss}
 \title{Expectation step for mixture of independent Gaussians}
 \usage{
-expectSelGauss(X, model, null)
+expectSelGauss(X, model)
 }
 \arguments{
 \item{X}{NxD data matrix.}

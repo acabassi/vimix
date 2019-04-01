@@ -4,7 +4,7 @@
 \alias{maximizeSelGauss}
 \title{Maximization step for categorical variables}
 \usage{
-maximizeSelGauss(X, model, prior, null)
+maximizeSelGauss(X, model, prior)
 }
 \arguments{
 \item{X}{NxD data matrix}

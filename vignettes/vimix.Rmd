@@ -79,7 +79,7 @@ Finally, it is important to note that the algorithm doesn't always converge to t
 
 ```{r example1-figure10-7, fig.show='hold', message=FALSE, warning = FALSE, cache=TRUE}
 maxK <- 10
-n_random_starts <- 20
+n_random_starts <- 30
 ELBO <- matrix(0, maxK-1, n_random_starts)
 for(k in 2:maxK){
     for(j in 1:n_random_starts){
@@ -139,7 +139,7 @@ Like before, there is no guarantee that the algorithm will converge to the globa
 
 ```{r example1-ind-figure10-7, fig.show='hold', message=FALSE, warning = FALSE, cache=TRUE}
 maxK <- 10
-n_random_starts <- 20
+n_random_starts <- 30
 ELBO <- matrix(0, maxK-1, n_random_starts)
 for(k in 2:maxK){
     for(j in 1:n_random_starts){

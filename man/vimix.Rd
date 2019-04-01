@@ -5,7 +5,7 @@
 \title{Variational Bayesian inference for unsupervised clustering}
 \usage{
 vimix(X, K, prior, indep = F, init = "kmeans", select = F,
-  tol = 1e-04, maxiter = 2000, verbose = F)
+  tol = 1e-09, maxiter = 2000, verbose = F)
 }
 \arguments{
 \item{X}{NxD data matrix.}

@@ -67,10 +67,10 @@ grid.arrange(plot_lb, plot_nc, ncol = 2)
 
 
 ```{r exampleuni-figure10-7, fig.show='hold', message=FALSE, warning = FALSE, cache=TRUE}
-data <- c(rnorm(1000,-3), rnorm(1000,3))
+data <- c(rnorm(100,-3), rnorm(100,3))
 
 maxK <- 10
-n_random_starts <- 20
+n_random_starts <- 30
 ELBO <- matrix(0, maxK-1, n_random_starts)
 for(k in 2:maxK){
     for(j in 1:n_random_starts){
