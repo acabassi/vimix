@@ -4,7 +4,8 @@
 #' @param prior Model parameters
 #' @return Value of lower bound
 #' @export
-boundGauss = function(X, model, prior){
+#'
+boundMulGauss = function(X, model, prior){
 
     alpha0 = prior$alpha
     beta0 = prior$beta

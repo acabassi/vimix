@@ -79,7 +79,7 @@
       <h1>Mixtures of multivariate categorical distributions</h1>
                         <h4 class="author">Alessandra Cabassi</h4>
             
-            <h4 class="date">2019-03-21</h4>
+            <h4 class="date">2019-04-01</h4>
       
       
       <div class="hidden name"><code>categorical-data.Rmd</code></div>
@@ -99,7 +99,7 @@
 <a class="sourceLine" id="cb2-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">## Check that the lower bound is monotonically increasing</span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">lb &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/broom/topics/tidy">tidy</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">lb &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/broom/topics/reexports">tidy</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>])</a>
 <a class="sourceLine" id="cb2-7" data-line-number="7">lb<span class="op">$</span>ELBO &lt;-<span class="st"> </span>lb<span class="op">$</span>x</a>
 <a class="sourceLine" id="cb2-8" data-line-number="8">lb<span class="op">$</span>x &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
 <a class="sourceLine" id="cb2-9" data-line-number="9">lb<span class="op">$</span>iter &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(output<span class="op">$</span>L[<span class="op">-</span><span class="dv">1</span>]))</a>
@@ -115,7 +115,7 @@
 <a class="sourceLine" id="cb2-19" data-line-number="19"></a>
 <a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co"># grid.arrange(plot_lb, plot_nc, ncol = 2)</span></a></code></pre></div>
 <p><img src="categorical-data_files/figure-html/example1-lb-1.png" width="700"></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">maxK &lt;-<span class="st"> </span><span class="dv">2</span></a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">maxK &lt;-<span class="st"> </span><span class="dv">4</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">n_random_starts &lt;-<span class="st"> </span><span class="dv">100</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">ELBO &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, maxK<span class="dv">-1</span>, n_random_starts)</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>maxK){</a>
@@ -145,7 +145,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
 </div>

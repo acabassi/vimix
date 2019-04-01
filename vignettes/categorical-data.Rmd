@@ -6,7 +6,7 @@ output:
     html_document:
       fig_width: 8
       theme: united
-      toc: yes
+      toc: no
 vignette: >
   %\VignetteIndexEntry{Mixtures of multivariate categorical distributions}
   %\VignetteEncoding{UTF-8}

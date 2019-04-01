@@ -6,7 +6,7 @@ output:
     html_document:
       fig_width: 8
       theme: united
-      toc: yes
+      toc: no
 vignette: >
   %\VignetteIndexEntry{Mixtures of multivariate Gaussian distributions}
   %\VignetteEncoding{UTF-8}
@@ -20,16 +20,26 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Mixtures of multivariate Gaussians
+
+Suppose we have a small dataset containing two clusters. 
+
 ```{r example1, message=FALSE, warning=FALSE, cache=TRUE}
 library(mvtnorm)
 library(vimix)
 
 ## Load a dataset containing 200 2-dimensional data points
 data <- rbind(rmvnorm(100,c(-3,0)), rmvnorm(100,c(3,0)))
+```
 
+Then we can use the function *vimix* to fit a mixture of multivariate Gaussian distributions:
+
+```{r example1-vimix, message=FALSE, warning=FALSE, cache=TRUE}
 ## Use variational inference for mixture of Gaussians to find clusters
 output <- vimix(data, K = 7, verbose = T)
 ```
+
+Let's see what our clusters look like:
 
 ```{r example1-plot, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Plot cluster labels
@@ -44,6 +54,8 @@ df$label <- as.factor(output$label)
 ## Plot clusters
 ggplot(df, aes(X1, X2, col = label)) + geom_point()
 ```
+
+The lower bound increases at each iteration of the algorithm and can be used to check whether the algorithm has converged. Another interesting value to check at each iteration is the number of non-empty clusters.
 
 ```{r example1-lb, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Check that the lower bound is monotonically increasing
@@ -63,9 +75,11 @@ plot_nc <- ggplot(lb, aes(x=iter,y=number_clusters)) + geom_line(linetype = "das
 grid.arrange(plot_lb, plot_nc, ncol = 2)
 ```
 
+Finally, it is important to note that the algorithm doesn't always converge to the same solution. Depending on the initialization, it will converge to different local optima. However, by runnin the algorithm multiple times, we can see that, the optimal solution is almost always reached, in this simple case. 
+
 ```{r example1-figure10-7, fig.show='hold', message=FALSE, warning = FALSE, cache=TRUE}
 maxK <- 10
-n_random_starts <- 100
+n_random_starts <- 30
 ELBO <- matrix(0, maxK-1, n_random_starts)
 for(k in 2:maxK){
     for(j in 1:n_random_starts){
@@ -82,11 +96,15 @@ ELBO$K <- ELBO$K + 1
 ggplot(ELBO, aes(x = K, y = ELBO)) + geom_point() + geom_jitter()
 ```
 
+Now, let's try to use the same mixture model as above, but with the additional assumption that all the variables are independent.
+
 ```{r example1-ind, message=FALSE, warning=FALSE, cache=TRUE}
 
 ## Use variational inference for mixture of Gaussians to find clusters
 output <- vimix(data, K = 7, indep = T, verbose = T)
 ```
+
+We can again check the clustering solution:
 
 ```{r example1-ind-plot, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Convert data matrix and cluster labels to data.frame
@@ -96,6 +114,8 @@ df$label <- as.factor(output$label)
 ## Plot clusters
 ggplot(df, aes(X1, X2, col = label)) + geom_point()
 ```
+
+and the lower bound and number of non-empty clusters at each iteration:
 
 ```{r example1-ind-lb, fig.show='hold', message=FALSE, warning=FALSE, cache=TRUE}
 ## Check that the lower bound is monotonically increasing
@@ -112,12 +132,14 @@ plot_lc <- ggplot(lb, aes(x=iter,y=ELBO)) + geom_line(linetype = "dashed") + geo
 ## Plot number of non-empty clusters
 plot_nc <- ggplot(lb, aes(x=iter,y=number_clusters)) + geom_line(linetype = "dashed") + geom_point()
 
-grid.arrange(plot_lb, plot_nc, ncol = 2)
+grid.arrange(plot_lc, plot_nc, ncol = 2)
 ```
+
+Like before, there is no guarantee that the algorithm will converge to the global optimum. However, we observe in practice that this is usually the case.
 
 ```{r example1-ind-figure10-7, fig.show='hold', message=FALSE, warning = FALSE, cache=TRUE}
 maxK <- 10
-n_random_starts <- 100
+n_random_starts <- 30
 ELBO <- matrix(0, maxK-1, n_random_starts)
 for(k in 2:maxK){
     for(j in 1:n_random_starts){

@@ -31,3 +31,5 @@ rsconnect/
 # Vignette cache
 vignettes/vimix_cache/*
 vignettes/univariate-mixtures_cache/*
+vignettes/variable-selection_cache/*
+vignettes/categorical-data_cache/*
