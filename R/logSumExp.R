@@ -3,8 +3,8 @@
 log_sum_exp <- function(x) {
     # Computes log(sum(exp(x))
     offset <- max(x)
-    s <- log(sum(exp(x - offset))) + offset
-    i <- which(!is.finite(s))
-    if (length(i) > 0) { s[i] <- offset }
-    return(s)
+    ss <- log(sum(exp(x - offset))) + offset
+    ii <- which(!is.finite(ss))
+    if (length(ii) > 0) { ss[ii] <- offset }
+    return(ss)
 }
