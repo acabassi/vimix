@@ -21,7 +21,7 @@
 #' output <- vimix(data, 2)
 #' @export
 #'
-vimix = function(X, K, prior, indep = F, init = "kmeans", select = F,
+vimix = function(X, K, prior, indep = F, init = "kmeans", select = F, saliencies = F,
                  tol = 10e-10, maxiter = 2000, verbose = F){
 
     if(is.vector(X)){
@@ -34,6 +34,8 @@ vimix = function(X, K, prior, indep = F, init = "kmeans", select = F,
         output = vimixIndGauss(X, K, prior, init, tol, maxiter, verbose)
     }else if(select){
         output = vimixSelGauss(X, K, prior, init, tol, maxiter, verbose)
+    }else if(saliencies){
+        output = vimixSalGauss(X, K, prior, init, tol, maxiter, verbose)
     }else{
         output = vimixMulGauss(X, K, prior, init, tol, maxiter, verbose)
     }
